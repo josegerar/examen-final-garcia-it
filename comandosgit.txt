@@ -1,0 +1,5 @@
+git remote add origin https://github.com/josegerar/examen-final-garcia-it.git
+
+git branch -M main
+
+git push -u origin main
