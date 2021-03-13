@@ -25,12 +25,14 @@ tabEmisoras <- tabItem(
         numericInput(
           inputId = "canalEmisora",
           label = "Canal",
-          value = 0
+          value = 0,
+          step= ".01"
         )
       ),
       column(width = 1)
     ),
     actionButton(inputId = "btnGuardarEmisora", label = "Guardar emisora"),
+    hr(),
     DT::dataTableOutput("tablaEmisoras")
   )
 )

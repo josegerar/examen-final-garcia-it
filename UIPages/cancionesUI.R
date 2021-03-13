@@ -26,6 +26,7 @@ tabCanciones <- tabItem(
       column(width = 1)
     ),
     actionButton(inputId = "btnGuardarCancion", label = "Guardar cancion"),
+    hr(),
     DT::dataTableOutput("tablaCanciones")
   )
 )

@@ -43,3 +43,21 @@ getTable <- function(dataref, dataname) {
   )
   return(datatb)
 }
+
+getLisNames = function(data){
+  listnames = list()
+  for (i in 1:length(names(data))) {
+    name = names(data)[i]
+    listnames[name] = i
+  }
+  return(listnames)
+}
+
+getLisColumData = function(columid, columname){
+  listnames = list()
+  for (i in seq_len(nrow(columid))) {
+    name = columname[i,1]
+    listnames[name] = columid[i,1]
+  }
+  return(listnames)
+}
