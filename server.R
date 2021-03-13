@@ -108,11 +108,63 @@ server <- function(input, output, session) {
     }
     updateNumericInput(session, "idprogramaradial", value = 0)
     updateTextInput(session, "nombreprogramaradial", value = "")
+    listaEmisorasSelect = getLisColumData(dataEmisoras[1], dataEmisoras[2])
+    updateSelectInput(
+      session,
+      "selectemisoraprogramaradial",
+      choices = listaEmisorasSelect,
+      selected = tail(listaEmisorasSelect, 1)
+    )
+    listaEsInteractivo = list("SI" = 'true', "NO" = 'false')
+    updateSelectInput(
+      session,
+      "selectinteractivoprogramaradial",
+      choices = listaEsInteractivo,
+      selected = tail(listaEsInteractivo, 1)
+    )
+    updateTimeInput(session, "horainicioprogramaradial", value = getTimeFormated("00:00:00"))
+    updateTimeInput(session, "horafinprogramaradial", value = getTimeFormated("00:00:00"))
     dataProgramasRadiales = getDataProgramaRadial()
-    dRProgramasRadiales <-
-      reactiveValues(data = getTable(dataProgramasRadiales, "programasradiales"))
+    dRProgramasRadiales$data = getTable(dataProgramasRadiales, "programasradiales")
   })
   
+  observeEvent(input$button_programasradiales_edit, {
+    dataProgramasRadiales = getDataProgramaRadial()
+    selectedRow <- as.numeric(strsplit(input$button_programasradiales_edit, "_")[[1]][3])
+    for (i in seq_len(nrow(dataProgramasRadiales))) {
+      if (dataProgramasRadiales[i,][1] == selectedRow) {
+        
+        updateNumericInput(session, "idprogramaradial", value = as.numeric(dataProgramasRadiales[i,][1]))
+        updateTextInput(session, "nombreprogramaradial", value = as.character(dataProgramasRadiales[i,][2]))
+        
+        listaEmisorasSelect = getLisColumData(dataEmisoras[1], dataEmisoras[2])
+        listindex = getLisIndex(listaEmisorasSelect, as.numeric(dataProgramasRadiales[i,][3]))
+        updateSelectInput(
+          session,
+          "selectemisoraprogramaradial",
+          choices = listaEmisorasSelect,
+          selected = tail(listaEmisorasSelect[listindex], 1)
+        )
+        listaEsInteractivo = list("SI" = 'true', "NO" = 'false')
+        indexEsInteractivo = getindexEsInteractivo(as.numeric(dataProgramasRadiales[i,][6]))
+        updateSelectInput(
+          session,
+          "selectinteractivoprogramaradial",
+          choices = listaEsInteractivo,
+          selected = tail(listaEsInteractivo[indexEsInteractivo], 1)
+        )
+        updateTimeInput(session, "horainicioprogramaradial", value = getTimeFormated(dataProgramasRadiales[i,][4]))
+        updateTimeInput(session, "horafinprogramaradial", value = getTimeFormated(dataProgramasRadiales[i,][5]))
+      }
+    }
+  })
+  
+  observeEvent(input$button_programasradiales_delete, {
+    selectedRow <- as.numeric(strsplit(input$button_programasradiales_delete, "_")[[1]][3])
+    borrarProgramaRadial(selectedRow)
+    dataProgramasRadiales = getDataProgramaRadial()
+    dRProgramasRadiales$data = getTable(dataProgramasRadiales, "programasradiales")
+  })
   #--------------------------------------------------------------------------------------------------
   
   #carga de datos en las datatables------------------------------------------------------------------
@@ -145,10 +197,6 @@ server <- function(input, output, session) {
       choices = listaEmisorasSelect,
       selected = tail(listaEmisorasSelect, 1)
     )
-    
-    output$textoutput <- renderText({
-      input$selectinteractivoprogramaradial
-    })
   })
   #--------------------------------------------------------------------------------------------------
 }

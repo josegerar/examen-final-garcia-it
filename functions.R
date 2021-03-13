@@ -8,7 +8,16 @@ shinyInput <- function(FUN, len, id, ids, ...) {
   inputs
 }
 
-update_select_input_data = function(session, data_proccess, label_search_data, select_name){
+ update_select_input_data_colum = function(session, listaSelect, idlist, select_name){
+  updateSelectInput(
+    session,
+    select_name,
+    choices = listaSelect,
+    selected = tail(listaSelect[idlist], 1)
+  )
+}
+
+ update_select_input_data = function(session, data_proccess, label_search_data, select_name){
   updateSelectInput(
     session,
     select_name,
@@ -61,3 +70,19 @@ getLisColumData = function(columid, columname){
   }
   return(listnames)
 }
+
+getLisIndex = function(lista, indexsearch){
+  listnames = names(lista)
+  for (i in 1:length(listnames)) {
+    if(indexsearch == as.numeric(lista[listnames[i]])){
+      return(listnames[i])
+    }
+  }
+  return(listnames[1])
+}
+
+getTimeFormated <- function(val){
+  return(paste0(Sys.Date(), " ", val))
+}
+
+
