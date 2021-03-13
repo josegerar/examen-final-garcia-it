@@ -1,4 +1,5 @@
 library(shiny)
+library(utf8)
 
 shinyInput <- function(FUN, len, id, ids, ...) {
   inputs <- character(len)
@@ -84,5 +85,3 @@ getLisIndex = function(lista, indexsearch){
 getTimeFormated <- function(val){
   return(paste0(Sys.Date(), " ", val))
 }
-
-

@@ -3,6 +3,7 @@ library(shinydashboard)
 library(DT)
 library(shinyTime)
 source("functions.R")
+source("dataController/emisoraController.R")
 
 dataEmisoras = getDataEmisoras()
 
@@ -29,7 +30,7 @@ tabProgramaRadial <- tabItem(
         selectInput(
           inputId = 'selectemisoraprogramaradial',
           label = "Seleccione la emisira",
-          choices = getLisColumData(dataEmisoras[1], dataEmisoras[2])
+          choices = getLisColumData(columid = dataEmisoras[1], columname = dataEmisoras[2])
         ),
         selectInput(
           inputId = 'selectinteractivoprogramaradial',
@@ -39,9 +40,8 @@ tabProgramaRadial <- tabItem(
       ),
       column(
         width = 6,
-        timeInput("horainicioprogramaradial", "Hora inicio de programa (hh:MM):", seconds = FALSE, minute.steps = 5),
-        timeInput("horafinprogramaradial", "Hora fin de programa (hh:MM):", seconds = FALSE, minute.steps = 5),
-        textOutput(outputId = "textoutput")
+        timeInput("horainicioprogramaradial", "Hora inicio de programa (hh:MM:ss):"),
+        timeInput("horafinprogramaradial", "Hora fin de programa (hh:MM:ss):")
       )
     ),
     actionButton(inputId = "btnGuardarProgramaRadial", label = "Guardar Programa radial"),
